@@ -1,19 +1,23 @@
 /* eslint-disable no-undef */
 /// <reference types="cypress" />
+const getRandomInteger = (digit, toString) => {
+	let array = new Uint32Array(1);
+	const random = window.crypto.getRandomValues(array).at(0).toString().slice(0, digit);
+	return toString ? random : Number.parseInt(random);
+};
 
 const testFactory = (testName, name, country, cord, expectedWarning) => {
 	it(testName, () => {
 		cy.reload();
 		cy.get("input[placeholder=Name]").type(name);
 		cy.get("input[placeholder=Country]").type(country);
-		cy.get("input[placeholder=NumOfGuest]").type(Math.floor(Math.random() * 100));
-		cy.get("input[placeholder=NumOfRooms]").type(Math.floor(Math.random() * 100));
+		cy.get("input[placeholder=NumOfGuest]").type(getRandomInteger(2, false));
+		cy.get("input[placeholder=NumOfRooms]").type(getRandomInteger(2, false));
 		cy.get("input[placeholder=Coordinates]").type(cord);
 		cy.contains("Save").click();
 		cy.get("div[role=alert]").should("contain", expectedWarning);
 	});
 };
-
 
 describe("Registration", () => {
 	it("Visit homepage", () => {
@@ -101,7 +105,6 @@ describe("Registration", () => {
 	});
 });
 
-
 describe("Login", () => {
 	it("Visit homepage", () => {
 		cy.reload();
@@ -110,7 +113,6 @@ describe("Login", () => {
 		cy.get("[id=floatingInput]").type("davidwallace@gmail.com");
 		cy.get("[id=floatingPassword]").type("123abcABC!");
 		cy.contains("Submit").click();
-		//cy.url().should("include", "dragonzhao1992@gmail.com");
 		cy.contains("Add Hut").click();
 	});
 });
@@ -119,35 +121,35 @@ describe("Test submit huts", () => {
 	testFactory("testInvalidHutName", "     ", "123123213", "2,2", "hut");
 	testFactory(
 		"testInvalidCountryName",
-		"Bad hut" + Math.floor(Math.random() * 10).toString(),
+		"Bad hut" + getRandomInteger(1, true),
 		"123123213",
 		"2,2",
 		"country"
 	);
 	testFactory(
 		"testNonTwoDimensionalCoordiante1",
-		"Bad hut" + Math.floor(Math.random() * 10).toString(),
+		"Bad hut" + getRandomInteger(1, true),
 		"Italy",
 		"1",
 		"coordinates"
 	);
 	testFactory(
 		"testNonTwoDimensionalCoordiante2",
-		"Bad hut" + Math.floor(Math.random() * 10).toString(),
+		"Bad hut" + getRandomInteger(1, true),
 		"Italy",
 		"1,2,3",
 		"coordinates"
 	);
 	testFactory(
 		"testNonNumericalCoordiante",
-		"Bad hut" + Math.floor(Math.random() * 10).toString(),
+		"Bad hut" + getRandomInteger(1, true),
 		"Italy",
 		"qwdqwd",
 		"coordinates"
 	);
 	testFactory(
 		"testNonNumericalCoordiante",
-		"Bad hut" + Math.floor(Math.random() * 10).toString(),
+		"Bad hut" + getRandomInteger(1, true),
 		"Italy",
 		"2,3123qwdqwd",
 		"coordinates"

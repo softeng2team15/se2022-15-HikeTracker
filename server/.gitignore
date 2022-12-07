@@ -10,6 +10,7 @@
 /.nyc_output
 # production
 /build
+/test/credentials.js
 
 # misc
 .DS_Store

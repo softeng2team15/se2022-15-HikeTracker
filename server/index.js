@@ -6,8 +6,9 @@ const parkings = require('./dao/parkings');
 const multer = require('multer');
 const huts = require('./dao/huts');
 const app = express();
+app.disable("x-powered-by");
 const port = 3001;
-const upload = multer();
+const upload = multer({limits: {fieldSize: 8388608}});
 
 // AUTHENTICATION CONTROL
 const passport = require('passport');
