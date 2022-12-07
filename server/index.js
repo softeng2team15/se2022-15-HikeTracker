@@ -8,7 +8,7 @@ const huts = require('./dao/huts');
 const app = express();
 app.disable("x-powered-by");
 const port = 3001;
-const upload = multer({limits: {fieldSize: 8388608}});
+const upload = multer({limits: {fileSize: 8000000}});
 
 // AUTHENTICATION CONTROL
 const passport = require('passport');

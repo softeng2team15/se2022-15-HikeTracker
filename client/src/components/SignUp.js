@@ -86,11 +86,11 @@ function SignUp(props) {
                             setError('Email is incorrect')
                         }
 
-                        else if (!name.match(/(\S+(\w)+\s{1})+/)) {
+                        else if (!name.match(/^([a-zA-Z]{1,20}\s){0,4}[a-zA-Z]{1,20}$/)) {
                             setError('Name is incorrect')
                         }
 
-                        else if (!surname.match(/(\S+(\w)+\s{1})+/)) {
+                        else if (!surname.match(/^([a-zA-Z]{1,20}\s){0,4}[a-zA-Z]{1,20}$/)) {
                             setError('Surname is incorrect')
                         }
 
