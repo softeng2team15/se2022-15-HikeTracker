@@ -12,7 +12,6 @@ import 'leaflet/dist/leaflet.css';
 
 import './HikesForHikers.css'
 import { useState } from 'react';
-import globalVariables from "../lib/globalVariables";
 
 function HikesForHikers(props) {
     let position = [50.5, 30.5];
@@ -94,7 +93,7 @@ function HikesForHikers(props) {
                         <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                url={globalVariables.mapTiles}
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
                             <Marker position={position}>
                                 <Popup>

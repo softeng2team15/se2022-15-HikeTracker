@@ -1,7 +1,7 @@
 import { Row, Col, Form, FloatingLabel, Button, Alert, Container } from 'react-bootstrap';
 import { PointMap } from '../components';
 import services from '../lib/services';
-import { CheckCircle, GeoFill, XCircle, ArrowLeft } from 'react-bootstrap-icons'
+import { Upload, GeoFill, XCircle, ArrowLeft } from 'react-bootstrap-icons'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ServerReply from "../components/serverReply";
@@ -56,11 +56,6 @@ function AddHutForm(props) {
 
     }
 
-    const setCoordinateAndGetCountry = (coordinate) => {
-        setCoord(coordinate);
-        services.GetAddressFromPoint(coordinate[0], coordinate[1]).then(x => setCountry(`${x.address.country}`.replace('undefined','')));
-    }
-
     return (<>
         <div style={{
             backgroundImage: "url(/images/pexels-arianna-tavaglione-5771589.jpg)",
@@ -85,7 +80,7 @@ function AddHutForm(props) {
                             opacity: "90%"
                         }}>
                         {/* MAP */}
-                        {openArea ? (<PointMap openArea={openArea} setOpenArea={setOpenArea} setCoord={setCoordinateAndGetCountry} coord={coord} />) : <></>}
+                        {openArea ? (<PointMap openArea={openArea} setOpenArea={setOpenArea} setCoord={setCoord} coord={coord} />) : <></>}
 
 
                         {/* FORM */}
@@ -127,20 +122,13 @@ function AddHutForm(props) {
                                 <GeoFill className="me-3" />
                                 Position
                             </Alert>
-
-                            {/* Country */}
-                            <FloatingLabel controlId="floatingInput" label="Country" className="mb-3">
-                                <Form.Control disabled={true} type="text" placeholder="Country" value={country} onClick={() => setErr(false)} onChange={(event) => setCountry(event.target.value)} />
-                            </FloatingLabel>
-
-
                             {/* ERROR HANDLING */}
                             <ServerReply error={err} success={done} waiting={waiting} errorMessage={"Error while adding a new hut"} successMessage={"New hut added correctly!"} />
 
                             
                             {/* BUTTONS */}
                             <div className="d-flex flex-row-reverse">
-                                <CheckCircle role="button" className="me-3" onClick={(handleSubmit)} type="submit" size="20px" />
+                                <Upload role="button" className="me-3" onClick={(handleSubmit)} type="submit" size="20px" />
                                 <XCircle role="button" className="me-3 " onClick={resetFields} variant="outline-secondary" size="20px" />
                                 <ArrowLeft role="button" className="me-3" onClick={() => navigate("/hut")}  size="20px" />
                             </div>
