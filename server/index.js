@@ -144,15 +144,14 @@ app.post('/api/newHike', upload.single('file'), async (req, res) => {
 // ***** example ****
 // {
 //     "name":"first hut",
-//     "country":"italy",
 //     "numberOfGuests":5,
 //     "numberOfBedrooms":4,
 //     "coordinates":"41.000144, 14.534893"
 //  }
 
 app.post('/api/huts', async (req, res) => {
-    const { name, country, numberOfGuests, numberOfBedrooms, coordinate } = req.body;
-    huts.insertHut(name, country, numberOfGuests, numberOfBedrooms, coordinate)
+    const { name, description, numberOfBeds, coordinate, phone, email, website } = req.body;
+    huts.insertHut(name, description, numberOfBeds, coordinate, phone, email, website)
         .then(lastId => res.json(lastId))
         .catch(err => res.status(500).json('Error on inserting hut: \r\n' + err));
 });
@@ -185,8 +184,8 @@ app.post('/api/huts', async (req, res) => {
 //  }
 // ]
 app.post('/api/huts/list', async (req, res) => {
-    const { name, country, numberOfGuests, numberOfBedrooms, coordinate, geographicalArea } = req.body;
-    huts.getHutsListWithFilters(name, country, numberOfGuests, numberOfBedrooms, coordinate, geographicalArea)
+    const { name, numberOfBeds} = req.body;
+    huts.getHutsListWithFilters(name, numberOfBeds)
         .then(huts => res.json(huts))
         .catch(err => res.status(500).json('Error looking for hut: \r\n' + err));
 });

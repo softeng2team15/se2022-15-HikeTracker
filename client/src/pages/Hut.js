@@ -8,8 +8,6 @@ import api from '../lib/api';
 function Hut(props) {
 
   const [filterName, setFilterName] = useState(null);
-  const [filterCountry, setFilterCountry] = useState(null);
-  const [filterGuests, setFilterGuests] = useState(null);
   const [filterBeds, setFilterBeds] = useState(null);
   const [isHover, setIsHover] = useState(false);
   const [searchHover, setSearchHover] = useState(false);
@@ -17,26 +15,24 @@ function Hut(props) {
 
   useEffect(() => {
     const getHuts = async () => {
-        const huts = await api.getHutsListWithFilters(null, null, null, null, null, null);
+        const huts = await api.getHutsListWithFilters(filterName, filterBeds);
         props.setHuts(huts);
+        console.log(huts);
     }
-    if (filterName==null && filterCountry==null && filterGuests==null && filterBeds==null) {getHuts(); console.log(props.user)};
+    if (filterName==null && filterBeds==null) {getHuts(); console.log(props.user)};
   }, []);
 
   const navigate = useNavigate();
 
   const filterHutSubmit = (event) => {
     event.preventDefault();
-    props.filteringHut(filterName !== '' ? filterName : null,
-      filterCountry !== '' ? filterCountry : null,
-      filterGuests !== '' ? filterGuests : null,
+    props.filteringHut(
+      filterName !== '' ? filterName : null,
       filterBeds !== '' ? filterBeds : null);
   }
 
   const resetFields = () => {
     setFilterName(null);
-    setFilterCountry(null);
-    setFilterGuests(null);
     setFilterBeds(null);
     setIsHover(false);
     setSearchHover(false);
@@ -61,36 +57,14 @@ function Hut(props) {
             </div>
           </div>
 
-          {/***** Country filter *****/}
-          <div className="mt-2">
-            <div className="d-grid gap-2">
-              <Form>
-                <Form.Group className="mb-3" controlId="InputCountry">
-                  <Form.Label><strong>Country</strong></Form.Label>
-                  <Form.Control type="text" placeholder="Country" onChange={(event) => setFilterCountry(event.target.value)} />
-                </Form.Group>
-              </Form>
-            </div>
-          </div>
-
-          {/***** N° of guest filter *****/}
-          <div className="mt-2">
-            <div className="d-grid gap-2">
-              <Form>
-                <Form.Group className="mb-3" controlId="InputGuests">
-                  <Form.Label><strong>N° of guest</strong></Form.Label>
-                  <Form.Control type="number" min={0} step={1} onChange={(event) => setFilterGuests(event.target.value)} />
-                </Form.Group>
-              </Form>
-            </div>
-          </div>
+     
 
           {/***** N° of bedrooms filter *****/}
           <div className="mt-2">
             <div className="d-grid gap-2">
               <Form>
                 <Form.Group className="mb-3" controlId="InputBeds">
-                  <Form.Label><strong>N° of bedrooms</strong></Form.Label>
+                  <Form.Label><strong>N° of beds</strong></Form.Label>
                   <Form.Control type="number" min={0} step={1} onChange={(event) => setFilterBeds(event.target.value)} />
                 </Form.Group>
               </Form>
@@ -175,9 +149,11 @@ function HutRow(props) {
       <Card.Header><h4>{props.hut.name}</h4>
       </Card.Header>
       <Card.Body>
-        <Card.Text><strong>Country: </strong>{props.hut.country}<br></br>
-          <strong>Number of Guests: </strong>{props.hut.numberOfGuests} <br></br>
-          <strong>Number of Bedrooms: </strong>{props.hut.numberOfBedrooms}
+        <Card.Text><strong>Description: </strong>{props.hut.description}<br></br>
+          <strong>Number of Beds: </strong>{props.hut.numberOfBeds}<br/>
+          <strong>Phone Number: </strong>{props.hut.phone}<br/>
+          <strong>Email: </strong>{props.hut.email}<br/>
+          <strong>Website: </strong><a href={"https://"+props.hut.website}>{props.hut.website}</a><br/>
         </Card.Text>
       </Card.Body>
     </Card>

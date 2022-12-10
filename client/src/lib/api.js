@@ -78,7 +78,7 @@ async function addParking(pk) {
   else throw pk;
 };
 
-async function insertHut(name, country, numberOfGuests, numberOfBedrooms, coordinate) {
+async function insertHut(name, description, country, numberOfBeds, coordinate, phone, email, website ) {
     return new Promise((resolve, reject) => {
         const thisURL = "huts";
         fetch(new URL(thisURL, APIURL), {
@@ -86,7 +86,7 @@ async function insertHut(name, country, numberOfGuests, numberOfBedrooms, coordi
             headers:{
                 "Content-type": "application/json"
             },
-            body: JSON.stringify({name, country, numberOfGuests, numberOfBedrooms, coordinate}),
+            body: JSON.stringify({name, description, country, numberOfBeds, coordinate, phone, email, website}),
         })
             .then((response) => {
                 if (response.ok) {
@@ -211,7 +211,7 @@ const isLogged=async ()=>{
     else throw res.status;
 }
 
-async function getHutsListWithFilters(name, country, numberOfGuests, numberOfBedrooms, coordinate, geographicalArea) {
+async function getHutsListWithFilters(name, numberOfBeds) {
     return new Promise((resolve, reject) => {
         const thisURL = "huts/list";
         fetch(new URL(thisURL, APIURL), {
@@ -219,14 +219,13 @@ async function getHutsListWithFilters(name, country, numberOfGuests, numberOfBed
             headers:{
                 "Content-type": "application/json"
             },
-            body: JSON.stringify({name: name, country: country, numberOfGuests: numberOfGuests, 
-                numberOfBedrooms: numberOfBedrooms, coordinate: coordinate, geographicalArea: geographicalArea}),
+            body: JSON.stringify({name: name, numberOfBeds: numberOfBeds}),
         })
             .then((response) => {
                 if (response.ok) {
                     response.json().then(ret=>{
-                        const arr=[];ret.forEach(h=>arr.push(new Hut(h.IDPoint, h.Name, h.Coordinates, h.GeographicalArea,
-                            h.Country, h.NumberOfGuests, h.NumberOfBedrooms )));
+                        const arr=[];
+                        ret.forEach(h=>arr.push(new Hut(h.IDPoint, h.Name, h.Description, h.NumberOfBeds, h.Coordinates, h.Phone, h.Email, h.Website )));
                         resolve(arr);
                     });
                 } else {

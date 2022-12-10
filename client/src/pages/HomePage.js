@@ -84,10 +84,10 @@ function HomePage(props){
           <Carousel.Caption>
             <h1 style={{fontFamily:"Montserrat,Helvetica,Arial,Lucida,sans-serif", 
             fontWeight: "800",
-            fontSize: "49px"}}><strong>PROVA PROVA</strong></h1>
-            <p style={{fontFamily:"Montserrat,Helvetica,Arial,Lucida,sans-serif", 
+            fontSize: "49px"}}><strong>About us</strong></h1>
+            {/* <p style={{fontFamily:"Montserrat,Helvetica,Arial,Lucida,sans-serif", 
             fontWeight: "750",
-            fontSize: "18px"}}>Inventarsi qualcosa di bello</p>
+            fontSize: "18px"}}>Inventarsi qualcosa di bello</p> */}
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>

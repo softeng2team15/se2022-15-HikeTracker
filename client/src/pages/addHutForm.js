@@ -9,22 +9,24 @@ import ServerReply from "../components/serverReply";
 function AddHutForm(props) {
     const [openArea, setOpenArea] = useState(false);
     const [name, setName] = useState("");
-    const [country, setCountry] = useState("");
-    const [numGuests, setNumGuests] = useState("");
     const [numBeds, setNumBeds] = useState("");
     const [coord, setCoord] = useState();
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [description, setDescription] = useState("");
+    const [email, setEmail] = useState("");
+    const [website, setWebsite] = useState(null);
     const [message, setMessage] = useState("");
     const [err, setErr] = useState(false);
     const [done, setDone] = useState(false);
     const [waiting, setWaiting] = useState(false);
     const navigate = useNavigate();
-    
+
     const handleSubmit = (event) => {
         event.preventDefault();
         try {
-            if (validateInfo(name, country, numGuests, numBeds, coord, setMessage)) {
+            if (validateInfo(name, description, numBeds, coord, phoneNumber, email, website, setMessage)) {
                 setWaiting(true);
-                props.newHut(name, country, numGuests, numBeds, coord);
+                props.newHut(name, description, numBeds, coord, phoneNumber, email, website);
                 setWaiting(false);
                 setDone(true);
                 setTimeout(() => setDone(false), 3000);
@@ -45,10 +47,13 @@ function AddHutForm(props) {
     
     const resetFields = () => {
         setName("");
-        setCountry("");
-        setNumGuests("");
+        setDescription("");
         setNumBeds("");
         setCoord();
+        setEmail("");
+        setPhoneNumber("");
+        setWebsite("");
+
     }
 
     return (<>
@@ -86,21 +91,33 @@ function AddHutForm(props) {
                                 <Form.Control type="text" placeholder="Name" value={name} onClick={() => setErr(false)} onChange={(event) => setName(event.target.value)} />
                             </FloatingLabel>
 
-                            {/* Country */}
-                            <FloatingLabel controlId="floatingInput" label="Country" className="mb-3">
-                                <Form.Control type="text" placeholder="Country" value={country} onClick={() => setErr(false)} onChange={(event) => setCountry(event.target.value)} />
+                            {/* Description */}
+                            <FloatingLabel controlId="floatingInput" label="Description" className="mb-3">
+                                <Form.Control type="text" placeholder="NumOfBeds" value={description} onClick={() => setErr(false)} onChange={(event) => setDescription(event.target.value)} />
                             </FloatingLabel>
 
-                            {/* Number of guests */}
-                            <FloatingLabel controlId="floatingInput" label="Number of guest" className="mb-3">
-                                <Form.Control type="number" min={0} placeholder="NumOfGuest"
-                                    value={numGuests} onClick={() => setErr(false)} onChange={(event) => setNumGuests(event.target.value)} />
+                            {/* Number of beds */}
+                            <FloatingLabel controlId="floatingInput" label="Number of beds" className="mb-3">
+                                <Form.Control type="number" min={0} placeholder="NumOfBeds" value={numBeds} onClick={() => setErr(false)} onChange={(event) => setNumBeds(event.target.value)} />
+                            </FloatingLabel>
+                            
+                            {/* Phone */}
+                            <FloatingLabel controlId="floatingInput" label="Phone number" className="mb-3">
+                                <Form.Control type="text" min={0} placeholder="PhoneNumber" value={phoneNumber} onClick={() => setErr(false)} onChange={(event) => setPhoneNumber(event.target.value)} />
                             </FloatingLabel>
 
-                            {/* Number of rooms */}
-                            <FloatingLabel controlId="floatingInput" label="Number of bedrooms" className="mb-3">
-                                <Form.Control type="number" min={0} placeholder="NumOfRooms" value={numBeds} onClick={() => setErr(false)} onChange={(event) => setNumBeds(event.target.value)} />
+                            {/* Email */}
+                            <FloatingLabel controlId="floatingInput" label="Email" className="mb-3">
+                                <Form.Control type="text" min={0} placeholder="Email" value={email} onClick={() => setErr(false)} onChange={(event) => setEmail(event.target.value)} />
                             </FloatingLabel>
+
+                            {/* Website */}
+                            <FloatingLabel controlId="floatingInput" label="Website" className="mb-3">
+                                <Form.Control type="text" min={0} placeholder="Website" value={website} onClick={() => setErr(false)} onChange={(event) => setWebsite(event.target.value)} />
+                            </FloatingLabel>
+
+
+
                             <Alert role="button" variant="light" style={{ backgroundColor: "#FFFFFF", border: "1px solid #ced4da", color: "#000000" }} onClick={() => setOpenArea(true)}>
                                 <GeoFill className="me-3" />
                                 Position
@@ -123,8 +140,10 @@ function AddHutForm(props) {
     </>);
 }
 
-const validateInfo = (name, country, numberOfGuests, numberOfBedrooms, coordinate, setMessage) => {
-    if ([name, country, numberOfGuests, numberOfBedrooms, coordinate, setMessage].some(t => t.length === 0)) {
+const validateInfo = (name, description, numberOfBeds, coordinate, phone, email, website, setMessage) => {
+    var emailValidator = require("node-email-validation");
+
+    if ([name, description, numberOfBeds, coordinate, phone, email, setMessage].some(t => t.length === 0)) {
         setMessage("All fields should be filled");
         return false;
     }
@@ -132,10 +151,17 @@ const validateInfo = (name, country, numberOfGuests, numberOfBedrooms, coordinat
         setMessage("Invalid hut name.");
         return false;
     }
-    if (!country.match(/^[a-zA-Z]+[a-zA-Z]+$/)) {
-        setMessage("Invalid country name.");
+    // if (!country.match(/^[a-zA-Z]+[a-zA-Z]+$/)) {
+    //     setMessage("Invalid country name.");
+    //     return false;
+    // }
+    
+    if (!emailValidator.is_email_valid(email)) {
+        setMessage("Invalid email.");
         return false;
     }
+
+
     /*
     if (!(coordinate.split(",").length === 2 && coordinate.split(",").every(t => t.match(/^([0-9]*[.])?[0-9]+$/)))) {
         setMessage("The coordinates should be two numbers separated by comma");
